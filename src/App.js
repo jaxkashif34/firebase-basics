@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import LoginForm from "components/Auth/form/Form"
+import GoogleAuth from "components/Auth/googleAuth"
+import FaceBookAuth from "components/Auth/FaceBookAuth"
+import CloudFireStore from "components/cloud-firestore"
+// import PhoenNumber from 'components/PhoneNumber'
+import RealTimeDataBase from 'components/realTime-Database'
+import Srorage from "components/Storage"
 
-function App() {
+export default function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      {/* <LoginForm />
+      <GoogleAuth />
+      <FaceBookAuth /> */}
+      <CloudFireStore />
+      {/* <RealTimeDataBase /> */}
+      {/* <Srorage /> */}
+      {/* <PhoenNumber /> */}
+    </>
+  )
 }
-
-export default App;
