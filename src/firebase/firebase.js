@@ -5,6 +5,7 @@ import { getStorage } from 'firebase/storage';
 const firebaseConfig = {
   apiKey: 'AIzaSyAf96e0uxNhM9xkRT_tsR77EsUFxemvFnE',
   authDomain: 'fir-frontend-88140.firebaseapp.com',
+  databaseURL: 'https://fir-frontend-88140-default-rtdb.firebaseio.com',
   projectId: 'fir-frontend-88140',
   storageBucket: 'fir-frontend-88140.appspot.com',
   messagingSenderId: '28849543251',
