@@ -12,7 +12,9 @@ const firebaseConfig = {
   appId: '1:28849543251:web:0c1c5c5d48587a4f230ea6',
   measurementId: 'G-GLP8RL9E96',
 };
-export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-export const cf = getFirestore(app);
-export const db = getDatabase(app);
-export const st = getStorage(app);
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const cf = getFirestore(app);
+const db = getDatabase(app);
+const st = getStorage(app);
+
+export { app, cf, db, st };

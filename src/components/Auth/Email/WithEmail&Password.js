@@ -1,54 +1,12 @@
-import React, { useState } from 'react';
-import { Container, TextField, Stack, Snackbar, Button } from '@mui/material';
+import React from 'react';
+import { Container, TextField, Stack, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Form, Formik, Field } from 'formik';
 import { initialValues, validationSchema } from '../utils';
-import { getAuth, onAuthStateChanged, signOut, deleteUser, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'firebase/auth';
-export default function App() {
-  const [state, setState] = useState({ open: false, message: 'User Sign In' });
+// eslint-disable-next-line
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, updateEmail, sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth';
+export default function App({ setState }) {
   const auth = getAuth();
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      user.providerData.forEach((provider) => {
-        console.log(provider);
-      });
-    } else {
-      console.log('no user');
-    }
-  });
-
-
-  const provider = new GoogleAuthProvider();
-
-  const handleSignOut = () => {
-    signOut()
-      .then(() => {
-        setState({ open: true, message: `User Sign Out` });
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  };
-  const handleDeleteUser = async () => {
-    await deleteUser(auth.currentUser)
-      .then((user) => {
-        setState({ open: true, message: `User Delted Successfully` });
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  };
-
-  const loginWithProvider = async () => {
-    // ************** Sign In With Popover **************
-    // await signInWithPopup(auth, provider).then((result) => {
-    //   setState({ open: true, message: `Welcome ${result.user.displayName}` });
-    //   // console.log({ credentials });
-    // });
-    // ************** Sign In With Redirect **************
-    const credentials = await signInWithRedirect(auth, provider);
-  };
 
   const onSubmit = async (values, action) => {
     // ************** Creating User with Email and Password **************
@@ -106,8 +64,10 @@ export default function App() {
   };
 
   return (
-    <>
-      <Snackbar open={state.open} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setState({ ...state, open: false })} message={state.message} autoHideDuration={2000} />
+    <div>
+      <Typography variant="h5" textAlign="center">
+        Register/Login With Email and Password
+      </Typography>
       <Container sx={{ width: '50%' }}>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
           {(formik) => {
@@ -120,18 +80,9 @@ export default function App() {
                   <Field as={TextField} error={isValidEmail} helperText={touched.email && errors.email} type="email" name="email" variant="standard" label="email" />
                   <Field as={TextField} type="password" error={isValidPasswrod} name="password" variant="standard" label="password" helperText={touched.password && errors.password} />
                   <div style={{ marginTop: 40 }}>
-                    <LoadingButton type="submit" sx={{ width: '25%' }} variant="contained" loading={formik.isSubmitting}>
+                    <LoadingButton type="submit" sx={{ width: '33.333%' }} variant="contained" loading={formik.isSubmitting}>
                       Submit
                     </LoadingButton>
-                    <Button variant="contained" sx={{ width: '25%' }} onClick={() => handleSignOut()}>
-                      Sign Out
-                    </Button>
-                    <Button variant="contained" sx={{ width: '25%' }} onClick={() => handleDeleteUser()}>
-                      Delete User
-                    </Button>
-                    <Button variant="contained" sx={{ width: '25%' }} onClick={() => loginWithProvider()}>
-                      Google
-                    </Button>
                   </div>
                 </Stack>
               </Form>
@@ -139,6 +90,6 @@ export default function App() {
           }}
         </Formik>
       </Container>
-    </>
+    </div>
   );
 }
