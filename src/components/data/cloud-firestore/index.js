@@ -1,13 +1,36 @@
-import React, { useEffect } from 'react';
-import { collection, addDoc, getDocs, setDoc, doc, onSnapshot, Timestamp, arrayUnion, updateDoc, arrayRemove, increment, runTransaction, writeBatch, deleteDoc, deleteField } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  setDoc,
+  doc,
+  onSnapshot,
+  Timestamp,
+  arrayUnion,
+  updateDoc,
+  arrayRemove,
+  increment,
+  runTransaction,
+  writeBatch,
+  deleteDoc,
+  deleteField,
+  getDoc,
+  query,
+  where,
+  collectionGroup,
+} from 'firebase/firestore';
 import { cf } from '../../../firebase';
 import { Button, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 
 const CloudFireStore = ({ setState }) => {
-  const colRef = collection(cf, 'users');
-  const docRef = doc(cf, 'cities', 'Faisalabad');
+  // const [name, setName] = useState('');
+  const colRef = collection(cf, 'custom');
+  const lmRef = collection(cf, 'cities/BJ/landmark');
+  const docRef = doc(cf, 'cities', 'SF');
   const colDocRef = doc(colRef);
+  const customObjectRef = doc(cf, 'custom', 'Faisalabad');
   const sosYH = {
     house: 'house-4',
     rooms: 3,
@@ -20,8 +43,8 @@ const CloudFireStore = ({ setState }) => {
     country: 'Pakistan',
     planet: 'Earth',
     timestamp: Timestamp.now(),
-    regions: ['Punjab', 'Sindh', 'KPK', 'Balochistan', 'Gilgit Baltistan', 'Azad Kashmir'],
-    population: increment(10),
+    tourist_place: 'Ghanta Ghr',
+    population: increment(1000000),
   };
 
   const handleData = async () => {
@@ -34,14 +57,18 @@ const CloudFireStore = ({ setState }) => {
     //   // document isn't exists so all we have to do is use setDoc with third argument an object with
     //   // merge: true.
     //   await setDoc(
-    //     docRef,
+    //     doc(lmRef),
+    //     {
+    //       name: 'Beijing Ancient Observatory',
+    //       type: 'museum'
+    //   },
     //     // city,
-    //     sosYH,
+    //     // sosYH,
     //     { merge: true }
     //   );
     //   setState({ open: true, message: 'Document created successfully' });
     // } catch (e) {
-    //   console.log(e.code);
+    //   console.log(e);
     // }
     // ****************addDoc method****************
     // try {
@@ -60,35 +87,34 @@ const CloudFireStore = ({ setState }) => {
     //   console.error('Error adding document: ', e);
     // }
     // // ********** Custom Objects****************************
-    // // try {
-    // //   // with custom object
-    // //   class City {
-    // //     constructor(name, state, country) {
-    // //       this.name = name;
-    // //       this.state = state;
-    // //       this.country = country;
-    // //     }
-    // //     toString() {
-    // //       return `${this.name}, ${this.state}, ${this.country}`;
-    // //     }
-    // //   }
-    // //   const cityConverter = {
-    // //     toFirestore: (city) => ({
-    // //       name: city.name,
-    // //       state: city.state,
-    // //       country: city.country,
-    // //     }),
-    // //     fromFirestore: (onSnapshot, options) => {
-    // //       const data = onSnapshot.data(options);
-    // //       return new City(data.name, data.state, data.country);
-    // //     },
-    // //   };
-    // //   const customObjectRef = doc(cf, 'custom', 'LA').withConverter(cityConverter);
-    // //   await setDoc(customObjectRef, new City('Faisalabad', 'Punjab', 'Pakistan'), { merge: true });
-    // //   console.log('Document successfully written!');
-    // // } catch (e) {
-    // //   console.log(e);
-    // // }
+    // try {
+    //   // with custom object
+    //   class City {
+    //     constructor(name, state, country) {
+    //       this.name = name;
+    //       this.state = state;
+    //       this.country = country;
+    //     }
+    //     toString() {
+    //       return `${this.name}, ${this.state}, ${this.country}`;
+    //     }
+    //   }
+    //   const cityConverter = {
+    //     toFirestore: (city) => ({
+    //       name: city.name,
+    //       state: city.state,
+    //       country: city.country,
+    //     }),
+    //     fromFirestore: (onSnapshot, options) => {
+    //       const data = onSnapshot.data(options);
+    //       return new City(data.name, data.state, data.country);
+    //     },
+    //   };
+    //   await setDoc(customObjectRef.withConverter(cityConverter), new City('Faisalabad', 'Punjab', 'Pakistan'), { merge: true });
+    //   setState({ open: true, message: 'Document successfully written!' });
+    // } catch (e) {
+    //   console.log(e);
+    // }
     // ********** update Documnet ****************************
     // updateDoc(docRef, {
     //   regions: arrayRemove('Azad Kashmir'),
@@ -146,13 +172,137 @@ const CloudFireStore = ({ setState }) => {
     // } catch (e) {
     //   console.log(e.message);
     // }
+    // **************READ DATA***************************
+    // try {
+    //   const docSnap = await getDoc(docRef);
+    //   if (docSnap.exists()) {
+    //     console.log('Document Data', docSnap.data());
+    //     setState({ open: true, message: 'Document Found' });
+    //   } else {
+    //     setState({ open: true, message: "Document doesn't exists" });
+    //   }
+    // } catch (e) {
+    //   console.log(e.message, e.code);
+    // }
+    // ********** READ DATA with custom object ****************
+    // try {
+    //   class City {
+    //     constructor(name, state, country) {
+    //       this.name = name;
+    //       this.state = state;
+    //       this.country = country;
+    //     }
+    //     toString() {
+    //       return `${this.name}, ${this.state}, ${this.country}`;
+    //     }
+    //   }
+    //   const cityConverter = {
+    //     toFirestore: (city) => ({
+    //       name: city.name,
+    //       state: city.state,
+    //       country: city.country,
+    //     }),
+    //     fromFirestore: (onSnapshot, options) => {
+    //       const data = onSnapshot.data(options);
+    //       return new City(data.name, data.state, data.country);
+    //     },
+    //   };
+    //   const docSnap = await getDoc(customObjectRef.withConverter(cityConverter));
+    //   if (docSnap.exists()) {
+    //     console.log('Document Data', docSnap.data());
+    //     setState({ open: true, message: 'Document Found' });
+    //   } else {
+    //     setState({ open: true, message: 'Document Not Found' });
+    //   }
+    // } catch (e) {
+    //   console.log(e.message);
+    // }
+    // *********** Get Multiple Documents With Query ***************
+    // try {
+    //   const q = query(colRef, where('capital', '==', true));
+    //   const docsSnap = await getDocs(q);
+    //   docsSnap.forEach((doc) => {
+    //     if (doc.exists()) {
+    //       console.log(`Document ${doc.id} => `, doc.data());
+    //       setState({ open: true, message: 'Document Found' });
+    //     } else {
+    //       setState({ open: true, message: 'Document dont Found' });
+    //     }
+    //   });
+    // } catch (e) {
+    //   console.log(e.message);
+    // }
+    // *********** Get All Documents ***************
+    // try {
+    //   const docsSnap = await getDocs(colRef);
+    //   docsSnap.forEach((doc) => {
+    //     if (doc.exists()) {
+    //       console.log(`Document ${doc.id} => `, doc.data());
+    //       setState({ open: true, message: 'Documents Found' });
+    //     } else {
+    //       setState({ open: true, message: 'Documents dont Found' });
+    //     }
+    //   });
+    // } catch (e) {
+    //   console.log(e.message);
+    // }
   };
+
+  // ********* Listner (onSnapshot) Listen for updates and give us updated data *****
+
+  // *************** Simple query   *******************
+  // const q = query(colRef, where('regions', 'in', [['west_coast', 'norcal']]));
+
+  // *************** Compound Query *******************
+  // const q = query(colRef, where('state', '==', 'CA'), where('population', '<=', 10000000));
+
+  // *************** Collection Group Query *******************
+
+  const q = query(collectionGroup(cf, 'landmark'), where('type', '==', 'museum'));
+
+  const unsub = onSnapshot(
+    q,
+    (docSnap) => {
+      // **************** Listen for single Document ****************
+      // console.log(`${doc.id} => `, doc.data());
+      // ***** get to know whether the source of data is the server or the cached *****
+      // const source = doc.metadata.hasPendingWrites ? 'Cached' : 'Server';
+      // console.log(`From  ${source} => `, doc.data());
+      // setName(doc.data().name);
+
+      // ************* Listen for Quaries **************
+      docSnap.forEach((doc) => {
+        if (doc.exists()) {
+          console.log(`From ${doc.id} => `, doc.data());
+        } else {
+        }
+      }); // end of forEach
+      // ************* To See the Changes weather the document is ADDED, MODIFIED, REMOVED **************
+
+      // docSnap.docChanges().forEach((change) => {
+      //   if (change.type === 'added') {
+      //     console.log(`New City Added : `, change.doc.data());
+      //   } else if (change.type === 'modified') {
+      //     console.log(`City Modified : `, change.doc.data());
+      //   } else if (change.type === 'removed') {
+      //     console.log(`City Removed: `, change.doc.data());
+      //   }
+      // });
+    },
+    (e) => {
+      console.log(e);
+      setState({ open: true, message: 'Documents Found' });
+    }
+  );
 
   return (
     <Container maxWidth="md">
       <Typography color="white" variant="h5">
         Adding data to the clound Fire-Store
       </Typography>
+      {/* <Typography color="white" variant="h5">
+        {name}
+      </Typography> */}
       <Button onClick={() => handleData()} variant="contained">
         Add Data
       </Button>

@@ -8,6 +8,7 @@ import FBAuth from './FaceBook';
 // eslint-disable-next-line
 import GoogleAuth from './google';
 import GitHubAuth from './GitHub';
+import TwitterAuth from './Twitter';
 import { Button, Snackbar, Stack } from '@mui/material';
 
 const Auth = () => {
@@ -52,7 +53,8 @@ const Auth = () => {
         {/* <Email state={state} setState={setState} /> */}
         {/* <GoogleAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
         {/* <FBAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
-        <GitHubAuth setState={setState} photo={photo} setPhoto={setPhoto} />
+        {/* <GitHubAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
+        <TwitterAuth setState={setState} photo={photo} setPhoto={setPhoto} />
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant="contained" sx={{ width: '25%' }} onClick={() => handleSignOut()}>
