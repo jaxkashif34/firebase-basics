@@ -19,6 +19,12 @@ import {
   query,
   where,
   collectionGroup,
+  orderBy,
+  limit,
+  startAt,
+  endAt,
+  endBefore,
+  startAfter,
 } from 'firebase/firestore';
 import { cf } from '../../../firebase';
 import { Button, Typography } from '@mui/material';
@@ -26,8 +32,9 @@ import { Container } from '@mui/system';
 
 const CloudFireStore = ({ setState }) => {
   // const [name, setName] = useState('');
-  const colRef = collection(cf, 'custom');
-  const lmRef = collection(cf, 'cities/BJ/landmark');
+  const [refs, setRefs] = useState([]);
+  const colRef = collection(cf, 'cities');
+  const lmRef = collection(cf, 'cities/LA/landmark');
   const docRef = doc(cf, 'cities', 'SF');
   const colDocRef = doc(colRef);
   const customObjectRef = doc(cf, 'custom', 'Faisalabad');
@@ -57,10 +64,10 @@ const CloudFireStore = ({ setState }) => {
     //   // document isn't exists so all we have to do is use setDoc with third argument an object with
     //   // merge: true.
     //   await setDoc(
-    //     doc(lmRef),
+    //     doc(refs[0]),
     //     {
-    //       name: 'Beijing Ancient Observatory',
-    //       type: 'museum'
+    //       name: 'Jingshan Park',
+    //       type: 'park'
     //   },
     //     // city,
     //     // sosYH,
@@ -246,6 +253,21 @@ const CloudFireStore = ({ setState }) => {
     // } catch (e) {
     //   console.log(e.message);
     // }
+    // **********************DELETE The Document *********************
+    // try {
+    //   const q = query(collectionGroup(cf, 'landmark'));
+    //   const docSnap = await getDocs(q);
+    //   docSnap.forEach(async (document) => {
+    //     if (document.exists()) {
+    //       await deleteDoc(doc(cf, `cities/TOK/landmark/${document.id}`));
+    //       console.log('Document Deleted');
+    //     } else {
+    //       console.log("Document doesn't exists");
+    //     }
+    //   });
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   // ********* Listner (onSnapshot) Listen for updates and give us updated data *****
@@ -258,54 +280,101 @@ const CloudFireStore = ({ setState }) => {
 
   // *************** Collection Group Query *******************
 
-  const q = query(collectionGroup(cf, 'landmark'), where('type', '==', 'museum'));
+  // const q = query(collectionGroup(cf, 'nestedLandmark'), where('type', '==', 'museum'));
 
-  const unsub = onSnapshot(
-    q,
-    (docSnap) => {
-      // **************** Listen for single Document ****************
-      // console.log(`${doc.id} => `, doc.data());
-      // ***** get to know whether the source of data is the server or the cached *****
-      // const source = doc.metadata.hasPendingWrites ? 'Cached' : 'Server';
-      // console.log(`From  ${source} => `, doc.data());
-      // setName(doc.data().name);
+  // const unsub = onSnapshot(
+  //   q,
+  //   (docSnap) => {
+  //     // **************** Listen for single Document ****************
+  //     // console.log(`${doc.id} => `, doc.data());
+  //     // ***** get to know whether the source of data is the server or the cached *****
+  //     // const source = doc.metadata.hasPendingWrites ? 'Cached' : 'Server';
+  //     // console.log(`From  ${source} => `, doc.data());
+  //     // setName(doc.data().name);
 
-      // ************* Listen for Quaries **************
-      docSnap.forEach((doc) => {
-        if (doc.exists()) {
-          console.log(`From ${doc.id} => `, doc.data());
-        } else {
-        }
-      }); // end of forEach
-      // ************* To See the Changes weather the document is ADDED, MODIFIED, REMOVED **************
+  //     // ************* Listen for Quaries **************
+  //     docSnap.forEach((doc) => {
+  //       if (doc.exists()) {
+  //         console.log(`From ${doc.id} => `, doc.data());
+  //       } else {
+  //         console.log("Document doesn't exists");
+  //       }
+  //     }); // end of forEach
+  //     // ************* To See the Changes weather the document is ADDED, MODIFIED, REMOVED **************
 
-      // docSnap.docChanges().forEach((change) => {
-      //   if (change.type === 'added') {
-      //     console.log(`New City Added : `, change.doc.data());
-      //   } else if (change.type === 'modified') {
-      //     console.log(`City Modified : `, change.doc.data());
-      //   } else if (change.type === 'removed') {
-      //     console.log(`City Removed: `, change.doc.data());
-      //   }
-      // });
-    },
-    (e) => {
-      console.log(e);
-      setState({ open: true, message: 'Documents Found' });
-    }
-  );
+  //     // docSnap.docChanges().forEach((change) => {
+  //     //   if (change.type === 'added') {
+  //     //     console.log(`New City Added : `, change.doc.data());
+  //     //   } else if (change.type === 'modified') {
+  //     //     console.log(`City Modified : `, change.doc.data());
+  //     //   } else if (change.type === 'removed') {
+  //     //     console.log(`City Removed: `, change.doc.data());
+  //     //   }
+  //     // });
+  //   },
+  //   (e) => {
+  //     console.log(e);
+  //     setState({ open: true, message: 'Documents not Found Second Error Callback' });
+  //   }
+  // );
+  // *********** ge the nested document id and set to the state  *************
+  // const q = query(collectionGroup(cf, 'landmark'));
+  // const getData = async () => {
+  //   const docSnap = await getDocs(q);
+
+  //   docSnap.forEach((document) => {
+  //     const lmDocRef = collection(cf, `cities/TOK/landmark/${document.id}/nestedLandmark`);
+
+  //     setRefs((prev) => {
+  //       return [...prev, lmDocRef];
+  //     });
+
+  //     // new Promise([await setDoc(doc(lmDocRef, { ...document.data() })), await setDoc({ open: true, message: 'Document Added' })]);
+
+  //     // console.log(`From ${doc.id} => `, doc.data());
+  //   });
+  // };
+
+  // ******************** CURSOR CLAUSE **********************
+  // let document = 0;
+  // const getData = async () => {
+  //   try {
+  //     // ********* Setting the Previous Doc in the CURSOR clause ************
+  //     const prevQuery = query(collection(cf, 'cities'), orderBy('population'));
+  //     const prevDocSnap = await getDocs(prevQuery);
+  //     const q = query(colRef, orderBy('population'), startAt(prevDocSnap.docs[document]), limit(2));
+
+  //     const docSnap = await getDocs(q);
+  //     docSnap.forEach((doc) => {
+  //       console.log(`From ${doc.id} => `, doc.data());
+  //     });
+  //     document++;
+  //   } catch (e) {
+  //     console.log(`Error: ${e.message}`);
+  //   }
+  // };
+
+  // const getNext = () => {};
+
+  // useEffect(() => {
+  //   getData();
+
+  //   // return () => {
+  //   //   getData();
+  //   // };
+  // }, []); // eslint-disable-line
 
   return (
     <Container maxWidth="md">
       <Typography color="white" variant="h5">
         Adding data to the clound Fire-Store
       </Typography>
-      {/* <Typography color="white" variant="h5">
-        {name}
-      </Typography> */}
       <Button onClick={() => handleData()} variant="contained">
         Add Data
       </Button>
+      {/* <Button onClick={() => getData()} variant="contained">
+        Get Next Data
+      </Button> */}
     </Container>
   );
 };
