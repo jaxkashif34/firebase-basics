@@ -19,7 +19,7 @@ const Auth = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       user.providerData.forEach((user) => {
-        console.log('provider', user);
+        console.log('currentUser', user);
         setPhoto(user.photoURL);
       });
     } else {
@@ -53,8 +53,8 @@ const Auth = () => {
         {/* <Email state={state} setState={setState} /> */}
         {/* <GoogleAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
         {/* <FBAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
-        {/* <GitHubAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
-        <TwitterAuth setState={setState} photo={photo} setPhoto={setPhoto} />
+        <GitHubAuth setState={setState} photo={photo} setPhoto={setPhoto} />
+        {/* <TwitterAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant="contained" sx={{ width: '25%' }} onClick={() => handleSignOut()}>

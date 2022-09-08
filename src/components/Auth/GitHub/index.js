@@ -9,14 +9,14 @@ export default function App({ setState, photo, setPhoto }) {
 
   const loginWithProvider = async () => {
     // ************** Sign In With Popover **************
-    // await signInWithPopup(auth, provider)
-    //   .then((result) => {
-    //     setState({ open: true, message: `Sign In ${result.user.displayName}` });
-    //     setPhoto(result.user.photoURL);
-    //   })
-    //   .catch((e) => {
-    //     console.log('ErrorCode : ', e.code);
-    //   });
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        setState({ open: true, message: `Sign In ${result.user.displayName}` });
+        setPhoto(result.user.photoURL);
+      })
+      .catch((e) => {
+        console.log('ErrorCode : ', e.code);
+      });
     // ************** Sign In With Redirect **************
     // await signInWithRedirect(auth, provider);
   };

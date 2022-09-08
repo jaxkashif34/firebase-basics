@@ -18,13 +18,13 @@ export default function App({ setState }) {
     //     console.log(e.message);
     //   });
     // ************** Sign-In User with Email and Password **************
-    // await signInWithEmailAndPassword(auth, values.email, values.password)
-    //   .then((userDetails) => {
-    //     setState({ open: true, message: `${userDetails.user.email} Sign In` });
-    //   })
-    //   .catch((e) => {
-    //     console.log(e.message);
-    //   });
+    await signInWithEmailAndPassword(auth, values.email, values.password)
+      .then((userDetails) => {
+        setState({ open: true, message: `${userDetails.user.email} Sign In` });
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
     // ************** Update Profile **************
     // await updateProfile(auth.currentUser, {
     //   displayName: 'Google User',

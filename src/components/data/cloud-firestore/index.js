@@ -25,7 +25,10 @@ import {
   endAt,
   endBefore,
   startAfter,
+  enableIndexedDbPersistence,
+  disableNetwork,
 } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import { cf } from '../../../firebase';
 import { Button, Typography } from '@mui/material';
 import { Container } from '@mui/system';
@@ -34,10 +37,12 @@ const CloudFireStore = ({ setState }) => {
   // const [name, setName] = useState('');
   const [refs, setRefs] = useState([]);
   const colRef = collection(cf, 'cities');
+  const usersRef = collection(cf, 'users');
   const lmRef = collection(cf, 'cities/LA/landmark');
   const docRef = doc(cf, 'cities', 'SF');
   const colDocRef = doc(colRef);
   const customObjectRef = doc(cf, 'custom', 'Faisalabad');
+  const auth = getAuth();
   const sosYH = {
     house: 'house-4',
     rooms: 3,
@@ -64,11 +69,17 @@ const CloudFireStore = ({ setState }) => {
     //   // document isn't exists so all we have to do is use setDoc with third argument an object with
     //   // merge: true.
     //   await setDoc(
-    //     doc(refs[0]),
+    //     doc(usersRef, auth.currentUser.uid),
     //     {
-    //       name: 'Jingshan Park',
-    //       type: 'park'
-    //   },
+    //       age: 50,
+    //       email: auth.currentUser.email,
+    //       first_name: auth.currentUser.displayName.split(' ')[0],
+    //       last_name: auth.currentUser.displayName.split(' ')[1],
+    //       userId: auth.currentUser.uid,
+    //       isEmailVarifies: auth.currentUser.emailVerified,
+    //       timestamp: Timestamp.now(),
+    //       visibility: 'public',
+    //     },
     //     // city,
     //     // sosYH,
     //     { merge: true }
@@ -268,6 +279,63 @@ const CloudFireStore = ({ setState }) => {
     // } catch (e) {
     //   console.log(e);
     // }
+    // ***************** Read Single Document and test the security rules **********************
+    try {
+      // current security rules
+      //     rules_version = '2';
+      //     service cloud.firestore {
+      //     match /databases/{database}/documents {
+      //     function isSignIn() {
+      //       return request.auth != null;
+      //     }
+      //     match /cities/{docId} {
+      //     allow read, update, delete: if isSignIn() &&
+      //     request.auth.uid == docId;
+      //     allow create: if isSignIn();
+      //     }
+      //     match /users/{userDocId} {
+      //       allow read: if isSignIn() && resource.data.visibility == "public";
+      //       allow create: if  isSignIn() &&
+      //       request.resource.data.age is int &&
+      //       request.resource.data.email is string &&
+      //       request.resource.data.first_name is string &&
+      //       request.resource.data.last_name is string &&
+      //       request.resource.data.userId == request.auth.uid &&
+      //       request.resource.data.userId is string &&
+      //       request.resource.data.visibility in ["public", "private"] &&
+      //       request.resource.data.timestamp is timestamp &&
+      //       request.resource.data.isEmailVarifies is bool &&
+      //       request.resource.data.size() == 8
+      //       allow update, delete: if request.auth.uid == userDocId &&
+      //       request.resource.data.first_name == resource.data.first_name;
+      //     }
+      //   }
+      // }
+      console.log(auth.currentUser.uid);
+      // const docSnap = await getDoc(doc(usersRef, 'h47WEPuG7fWNEtqX7dFr96mNF5j1'));
+
+      // await setDoc(
+      //   doc(usersRef, auth.currentUser.uid),
+      //   {
+      //     age: 50,
+      //     email: 'hello@gmail.com',
+      //     first_name: 'hello',
+      //     last_name: 'world',
+      //     isEmailVarifies: true,
+      //     timestamp: Timestamp.now(),
+      //     userId: auth.currentUser.uid,
+      //     visibility: 'public',
+      //   },
+      //   { merge: true }
+      // );
+      // setState({ open: true, message: 'Document Created' });
+      // console.log(docSnap.data());
+      // **************** Practics the get method in firebase security rules *************
+      await deleteDoc(doc(cf, 'custom/Faisalabad'));
+      setState({ open: true, message: 'Document deleted' });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   // ********* Listner (onSnapshot) Listen for updates and give us updated data *****
@@ -276,7 +344,7 @@ const CloudFireStore = ({ setState }) => {
   // const q = query(colRef, where('regions', 'in', [['west_coast', 'norcal']]));
 
   // *************** Compound Query *******************
-  // const q = query(colRef, where('state', '==', 'CA'), where('population', '<=', 10000000));
+  // const q = query(colRef, where('state', '==', 'CA'));
 
   // *************** Collection Group Query *******************
 
@@ -284,6 +352,7 @@ const CloudFireStore = ({ setState }) => {
 
   // const unsub = onSnapshot(
   //   q,
+  //   { includeMetadataChanges: true },
   //   (docSnap) => {
   //     // **************** Listen for single Document ****************
   //     // console.log(`${doc.id} => `, doc.data());
@@ -311,6 +380,9 @@ const CloudFireStore = ({ setState }) => {
   //     //     console.log(`City Removed: `, change.doc.data());
   //     //   }
   //     // });
+  //     // ************* Source of Data cache or server ? ***************
+  //     const source = docSnap.metadata.fromCache ? 'local cache' : 'server';
+  //     console.log(source);
   //   },
   //   (e) => {
   //     console.log(e);
@@ -354,11 +426,9 @@ const CloudFireStore = ({ setState }) => {
   //   }
   // };
 
-  // const getNext = () => {};
-
   // useEffect(() => {
-  //   getData();
-
+  //   // getData();
+  //   disconnectNetwork();
   //   // return () => {
   //   //   getData();
   //   // };
@@ -372,7 +442,7 @@ const CloudFireStore = ({ setState }) => {
       <Button onClick={() => handleData()} variant="contained">
         Add Data
       </Button>
-      {/* <Button onClick={() => getData()} variant="contained">
+      {/* <Button onClick={() => disconnectNetwork()} variant="contained">
         Get Next Data
       </Button> */}
     </Container>
