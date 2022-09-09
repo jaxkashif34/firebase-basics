@@ -3,7 +3,7 @@ import Auth from './Auth';
 import Database from './data';
 const Firebase = () => {
   return (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
       <Auth />
       <Database />
     </div>

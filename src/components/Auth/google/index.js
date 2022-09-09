@@ -20,12 +20,14 @@ export default function App({ setState, photo, setPhoto }) {
 
   return (
     <Box sx={{ mx: 'auto' }}>
-      <Typography variant="h5" textAlign="center" color="white">
-        Register/Login With Google Provider
-      </Typography>
-      <Avatar alt="User Profile" src={photo} />
-      <Container sx={{ mt: 5 }}>
-        <Button variant="contained" sx={{ width: '25%' }} onClick={() => loginWithProvider()}>
+      <div style={{ display: 'flex' }}>
+        <Typography variant="h5" textAlign="center" color="white">
+          Register/Login With Google Provider
+        </Typography>
+        <Avatar alt="User Profile" src={photo} sx={{ ml: 3 }} />
+      </div>
+      <Container sx={{ mt: 2 }}>
+        <Button variant="contained" sx={{ width: '100%' }} onClick={() => loginWithProvider()}>
           <GoogleIcon /> Google
         </Button>
       </Container>

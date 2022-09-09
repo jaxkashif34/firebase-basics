@@ -68,7 +68,7 @@ export default function App({ setState }) {
       <Typography variant="h5" textAlign="center">
         Register/Login With Email and Password
       </Typography>
-      <Container sx={{ width: '50%' }}>
+      <Container>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
           {(formik) => {
             const { touched, errors } = formik;
