@@ -65,7 +65,7 @@ export default function App({ setState }) {
 
   return (
     <div>
-      <Typography variant="h5" textAlign="center">
+      <Typography variant="h5" textAlign="center" color="white">
         Register/Login With Email and Password
       </Typography>
       <Container>
