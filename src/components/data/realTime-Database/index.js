@@ -19,6 +19,7 @@ import {
   limitToFirst,
   limitToLast,
   startAt,
+  serverTimestamp,
 } from 'firebase/database';
 import { Button, Stack, Typography } from '@mui/material';
 import { getAuth } from 'firebase/auth';
@@ -27,28 +28,52 @@ import { endAt } from 'firebase/firestore';
 const RealTimeDatabase = ({ setState }) => {
   // one issue is that current user is null untill the auth is fully initilized thats why i used reference inside the function if we use is outside it will throw exception with uid is not defined
   const auth = getAuth();
-  const reference = ref(db, `users`);
-  const reference2 = ref(db, `users/-NBVfIp1Oi8Wuuz3oTTR`);
+  const usersRef = ref(db, `users`);
+  const gamesRef = ref(db, `games`);
+  const adminsRef = ref(db, `admins`);
+  const singleGameRef = ref(db, `games/-NBfph8WUdVoP2zJlyjO/metaData`);
+  // const reference2 = ref(db, `users/-NBVfIp1Oi8Wuuz3oTTR`);
+  const newGameRef = push(gamesRef);
+  const newUserRef = push(usersRef);
+  const newAdminRef = push(usersRef);
 
-  const newUserRef = push(reference);
   const handleData = async () => {
+    const userId = auth.currentUser.uid;
+    console.log(userId);
     // set data to the database at path (users => currentUser.uid)
-    // try {
-    //   await set(newUserRef, {
-    //     name: 'Nasir',
-    //     email: ' Nasir@gmail.com',
-    //     photoURL: 'Nasir photo',
-    //     userId: 'Nasir uid',
-    //   });
-    //   setState({ open: true, message: 'Data saved successfully' });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      // const gameData = {
+      //   metaData: {
+      //     date: '21-09-2022',
+      //     opponent: 'Ali Raza',
+      //     isPublic: false,
+      //   },
+      //   privateData: {
+      //     tickets: {
+      //       [userId]: true,
+      //     },
+      //     gameContent: {
+      //       name: 'Carom',
+      //     },
+      //   },
+      // };
+      const customRef = ref(db, `games/-NBhSi98Dt4gOo41OjPS/privateData/tickets/${userId}`);
+      // const adminsRef = ref(db, `admins/${userId}`);
+      await set(customRef, true);
+      setState({ open: true, message: 'Data saved successfully' });
+    } catch (e) {
+      console.log(e);
+    }
     // ******************* update the document *******************
     // try {
-    //   await update(reference2, {
-    //     name: 'Kashif Mehmood',
+    //   await update(singleGameRef, {
+    //     privateData: {
+    //       tickets: {
+    //         [userId]: true,
+    //       },
+    //     },
     //   });
+    //   setState({ open: true, message: 'Updated' });
     // } catch (error) {
     //   console.log(error);
     // }
@@ -70,14 +95,14 @@ const RealTimeDatabase = ({ setState }) => {
     // }
   };
 
-  // const getData = async () => {
-  //   // try {
-  //   //   const docSnap = await get(reference);
-  //   //   console.log(docSnap.val());
-  //   // } catch (e) {
-  //   //   console.log(e);
-  //   // }
-  // };
+  const getData = async () => {
+    try {
+      const docSnap = await get(usersRef);
+      console.log(docSnap.val());
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // ****************Listen for child events ********************
   // try {
@@ -102,9 +127,10 @@ const RealTimeDatabase = ({ setState }) => {
   //   console.log(e);
   // }
 
-  // useEffect(() => {
-  //   getData();
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    getData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // const q = query(reference);
   // ********* limitToFirst method *************
   // const q = query(reference, limitToFirst(2));

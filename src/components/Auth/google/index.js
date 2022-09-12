@@ -9,11 +9,11 @@ export default function App({ setState, photo, setPhoto }) {
 
   const loginWithProvider = async () => {
     // ************** Sign In With Popover **************
-    // await signInWithPopup(auth, provider).then((result) => {
-    //   setState({ open: true, message: `Welcome ${result.user.displayName}` });
-    //     setPhoto(result.user.photoURL);
-    //   // console.log({ credentials });
-    // });
+    await signInWithPopup(auth, provider).then((result) => {
+      setState({ open: true, message: `Welcome ${result.user.displayName}` });
+        setPhoto(result.user.photoURL);
+      // console.log({ credentials });
+    });
     // ************** Sign In With Redirect **************
     // await signInWithRedirect(auth, provider);
   };

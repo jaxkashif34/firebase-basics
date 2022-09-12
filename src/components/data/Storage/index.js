@@ -117,11 +117,11 @@ const Storage = ({ setState }) => {
     });
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
-  console.log(allImages);
+  // console.log(allImages);
 
   return (
     <>

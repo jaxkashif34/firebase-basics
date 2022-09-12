@@ -281,36 +281,6 @@ const CloudFireStore = ({ setState }) => {
     // }
     // ***************** Read Single Document and test the security rules **********************
     try {
-      // current security rules
-      //     rules_version = '2';
-      //     service cloud.firestore {
-      //     match /databases/{database}/documents {
-      //     function isSignIn() {
-      //       return request.auth != null;
-      //     }
-      //     match /cities/{docId} {
-      //     allow read, update, delete: if isSignIn() &&
-      //     request.auth.uid == docId;
-      //     allow create: if isSignIn();
-      //     }
-      //     match /users/{userDocId} {
-      //       allow read: if isSignIn() && resource.data.visibility == "public";
-      //       allow create: if  isSignIn() &&
-      //       request.resource.data.age is int &&
-      //       request.resource.data.email is string &&
-      //       request.resource.data.first_name is string &&
-      //       request.resource.data.last_name is string &&
-      //       request.resource.data.userId == request.auth.uid &&
-      //       request.resource.data.userId is string &&
-      //       request.resource.data.visibility in ["public", "private"] &&
-      //       request.resource.data.timestamp is timestamp &&
-      //       request.resource.data.isEmailVarifies is bool &&
-      //       request.resource.data.size() == 8
-      //       allow update, delete: if request.auth.uid == userDocId &&
-      //       request.resource.data.first_name == resource.data.first_name;
-      //     }
-      //   }
-      // }
       console.log(auth.currentUser.uid);
       // const docSnap = await getDoc(doc(usersRef, 'h47WEPuG7fWNEtqX7dFr96mNF5j1'));
 

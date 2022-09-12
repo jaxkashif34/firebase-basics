@@ -50,10 +50,10 @@ const Auth = () => {
       <Snackbar open={state.open} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setState({ ...state, open: false })} message={state.message} autoHideDuration={2000} />
       <Stack sx={{ justifyContent: 'space-evenly' }}>
         {/* components goes here */}
-        <Email state={state} setState={setState} />
-        {/* <GoogleAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
+        {/* <Email state={state} setState={setState} /> */}
         {/* <FBAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
         {/* <GitHubAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
+        <GoogleAuth setState={setState} photo={photo} setPhoto={setPhoto} />
         {/* <TwitterAuth setState={setState} photo={photo} setPhoto={setPhoto} /> */}
 
         <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 30 }}>

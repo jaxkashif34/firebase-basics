@@ -9,8 +9,8 @@ const DataBase = () => {
     <div>
       <Snackbar open={state.open} message={state.message} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setState({ open: false, message: '' })} autoHideDuration={1000} />
       {/* <CloudFireStore setState={setState} /> */}
-      {/* <RealTimeDatabase setState={setState} /> */}
-      <Storage setState={setState} />
+      <RealTimeDatabase setState={setState} />
+      {/* <Storage setState={setState} /> */}
     </div>
   );
 };
