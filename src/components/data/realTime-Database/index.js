@@ -38,61 +38,61 @@ const RealTimeDatabase = ({ setState }) => {
   const newAdminRef = push(usersRef);
 
   const handleData = async () => {
-    const userId = auth.currentUser.uid;
-    console.log(userId);
-    // set data to the database at path (users => currentUser.uid)
-    try {
-      // const gameData = {
-      //   metaData: {
-      //     date: '21-09-2022',
-      //     opponent: 'Ali Raza',
-      //     isPublic: false,
-      //   },
-      //   privateData: {
-      //     tickets: {
-      //       [userId]: true,
-      //     },
-      //     gameContent: {
-      //       name: 'Carom',
-      //     },
-      //   },
-      // };
-      const customRef = ref(db, `games/-NBhSi98Dt4gOo41OjPS/privateData/tickets/${userId}`);
-      // const adminsRef = ref(db, `admins/${userId}`);
-      await set(customRef, true);
-      setState({ open: true, message: 'Data saved successfully' });
-    } catch (e) {
-      console.log(e);
-    }
-    // ******************* update the document *******************
-    // try {
-    //   await update(singleGameRef, {
-    //     privateData: {
-    //       tickets: {
-    //         [userId]: true,
-    //       },
-    //     },
-    //   });
-    //   setState({ open: true, message: 'Updated' });
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // ************************* Remove or Delete the document *************************
-    // try {
-    //   await remove(reference2);
-    //   setState({ open: true, message: 'Data deleted successfully' });
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // Manuplate Data with Transaction // NOT WORKING
-    // try {
-    //   await runTransaction(reference, (currentData) => {
-    //     const data = currentData;
-    //     console.log(data);
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+  //   const userId = auth.currentUser.uid;
+  //   console.log(userId);
+  //   // set data to the database at path (users => currentUser.uid)
+  //   try {
+  //     // const gameData = {
+  //     //   metaData: {
+  //     //     date: '21-09-2022',
+  //     //     opponent: 'Ali Raza',
+  //     //     isPublic: false,
+  //     //   },
+  //     //   privateData: {
+  //     //     tickets: {
+  //     //       [userId]: true,
+  //     //     },
+  //     //     gameContent: {
+  //     //       name: 'Carom',
+  //     //     },
+  //     //   },
+  //     // };
+  //     const customRef = ref(db, `games/-NBhSi98Dt4gOo41OjPS/privateData/tickets/${userId}`);
+  //     // const adminsRef = ref(db, `admins/${userId}`);
+  //     await set(customRef, true);
+  //     setState({ open: true, message: 'Data saved successfully' });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //   // ******************* update the document *******************
+  //   // try {
+  //   //   await update(singleGameRef, {
+  //   //     privateData: {
+  //   //       tickets: {
+  //   //         [userId]: true,
+  //   //       },
+  //   //     },
+  //   //   });
+  //   //   setState({ open: true, message: 'Updated' });
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   // }
+  //   // ************************* Remove or Delete the document *************************
+  //   // try {
+  //   //   await remove(reference2);
+  //   //   setState({ open: true, message: 'Data deleted successfully' });
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   // }
+  //   // Manuplate Data with Transaction // NOT WORKING
+  //   // try {
+  //   //   await runTransaction(reference, (currentData) => {
+  //   //     const data = currentData;
+  //   //     console.log(data);
+  //   //   });
+  //   // } catch (e) {
+  //   //   console.log(e);
+  //   // }
   };
 
   const getData = async () => {
@@ -128,7 +128,7 @@ const RealTimeDatabase = ({ setState }) => {
   // }
 
   useEffect(() => {
-    getData();
+    // getData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // const q = query(reference);

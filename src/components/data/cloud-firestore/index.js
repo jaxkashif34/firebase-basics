@@ -30,8 +30,7 @@ import {
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { cf } from '../../../firebase';
-import { Button, Typography } from '@mui/material';
-import { Container } from '@mui/system';
+import { Button, Typography, Container } from '@mui/material';
 
 const CloudFireStore = ({ setState }) => {
   // const [name, setName] = useState('');
@@ -62,12 +61,12 @@ const CloudFireStore = ({ setState }) => {
   const handleData = async () => {
     // ****************setDoc method****************
     // try {
-    //   // while on the other hand setDoc did't return any thing and we have to set the collection and doc
-    //   // name manully inside the  doc method like this doc(cloud_fireStore, "collection_name/doc_name")
-    //   // and setDoc creats the document if does not exists if exists it completey overrides the document
-    //   // so if we think to use updateDoc menthod the drawback of this method is it throws and Error if
-    //   // document isn't exists so all we have to do is use setDoc with third argument an object with
-    //   // merge: true.
+    // while on the other hand setDoc did't return any thing and we have to set the collection and doc
+    // name manully inside the  doc method like this doc(cloud_fireStore, "collection_name/doc_name")
+    // and setDoc creats the document if does not exists if exists it completey overrides the document
+    // so if we think to use updateDoc menthod the drawback of this method is it throws and Error if
+    // document isn't exists so all we have to do is use setDoc with third argument an object with
+    // merge: true.
     //   await setDoc(
     //     doc(usersRef, auth.currentUser.uid),
     //     {
@@ -80,8 +79,8 @@ const CloudFireStore = ({ setState }) => {
     //       timestamp: Timestamp.now(),
     //       visibility: 'public',
     //     },
-    //     // city,
-    //     // sosYH,
+    // city,
+    // sosYH,
     //     { merge: true }
     //   );
     //   setState({ open: true, message: 'Document created successfully' });
@@ -89,24 +88,25 @@ const CloudFireStore = ({ setState }) => {
     //   console.log(e);
     // }
     // ****************addDoc method****************
+    try {
+      // addDoc return doc id, matadata and some other stuff and generate a random id for your document
+      // in case if you don't want to specifies the name of your document and it uses collection instead
+      // of doc method  (but we will use collection with setDoc method later) and only required the
+      // collection name like this  collection(cloud_fireStore, "collection_name").
+      const reference1 = await doc(colRef); // in this way we already created a random id for later use
+      const docRef = await addDoc(colRef, {
+        first: 'Kashif',
+        middle: 'Mehmood',
+        last: 'Ali',
+        born: 1999,
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+    // ********** Custom Objects****************************
     // try {
-    //   // addDoc return doc id, matadata and some other stuff and generate a random id for your document
-    //   // in case if you don't want to specifies the name of your document and it uses collection insted
-    //   // of doc method  (but we will use collection with addDoc method later) and only required the
-    //   // collection name like this  collection(cloud_fireStore, "collection_name").
-    //   const docRef = await addDoc(colRef, {
-    //     first: 'Kashif',
-    //     middle: 'Mehmood',
-    //     last: 'Ali',
-    //     born: 1999,
-    //   });
-    //   console.log('Document written with ID: ', docRef.id);
-    // } catch (e) {
-    //   console.error('Error adding document: ', e);
-    // }
-    // // ********** Custom Objects****************************
-    // try {
-    //   // with custom object
+    // with custom object
     //   class City {
     //     constructor(name, state, country) {
     //       this.name = name;
@@ -161,15 +161,15 @@ const CloudFireStore = ({ setState }) => {
     // }
     // ******** BATCHE **************
     // try {
-    //   // write a new Batch
+    // write a new Batch
     //   const batch = writeBatch(cf);
-    //   // set the value of PK
-    //   // batch.set(docRef, { planet: 'Earth' }, { merge: true });
-    //   // update the population of PK document
+    // set the value of PK
+    // batch.set(docRef, { planet: 'Earth' }, { merge: true });
+    // update the population of PK document
     //   batch.update(docRef, { population: increment(10) });
-    //   // delete the city LA
+    // delete the city LA
     //   batch.delete(doc(cf, 'cities/LA'));
-    //   // commit the batch
+    // commit the batch
     //   await batch.commit();
     //   setState({ open: true, message: `Batch updated successfully` });
     // } catch (e) {
@@ -280,32 +280,32 @@ const CloudFireStore = ({ setState }) => {
     //   console.log(e);
     // }
     // ***************** Read Single Document and test the security rules **********************
-    try {
-      console.log(auth.currentUser.uid);
-      // const docSnap = await getDoc(doc(usersRef, 'h47WEPuG7fWNEtqX7dFr96mNF5j1'));
+    // try {
+    // console.log(auth.currentUser.uid);
+    // const docSnap = await getDoc(doc(usersRef, 'h47WEPuG7fWNEtqX7dFr96mNF5j1'));
 
-      // await setDoc(
-      //   doc(usersRef, auth.currentUser.uid),
-      //   {
-      //     age: 50,
-      //     email: 'hello@gmail.com',
-      //     first_name: 'hello',
-      //     last_name: 'world',
-      //     isEmailVarifies: true,
-      //     timestamp: Timestamp.now(),
-      //     userId: auth.currentUser.uid,
-      //     visibility: 'public',
-      //   },
-      //   { merge: true }
-      // );
-      // setState({ open: true, message: 'Document Created' });
-      // console.log(docSnap.data());
-      // **************** Practics the get method in firebase security rules *************
-      await deleteDoc(doc(cf, 'custom/Faisalabad'));
-      setState({ open: true, message: 'Document deleted' });
-    } catch (e) {
-      console.log(e);
-    }
+    // await setDoc(
+    //   doc(usersRef, auth.currentUser.uid),
+    //   {
+    //     age: 50,
+    //     email: 'hello@gmail.com',
+    //     first_name: 'hello',
+    //     last_name: 'world',
+    //     isEmailVarifies: true,
+    //     timestamp: Timestamp.now(),
+    //     userId: auth.currentUser.uid,
+    //     visibility: 'public',
+    //   },
+    //   { merge: true }
+    // );
+    // setState({ open: true, message: 'Document Created' });
+    // console.log(docSnap.data());
+    // **************** Practics the get method in firebase security rules *************
+    // await deleteDoc(doc(cf, 'custom/Faisalabad'));
+    // setState({ open: true, message: 'Document deleted' });
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   // ********* Listner (onSnapshot) Listen for updates and give us updated data *****
@@ -324,14 +324,14 @@ const CloudFireStore = ({ setState }) => {
   //   q,
   //   { includeMetadataChanges: true },
   //   (docSnap) => {
-  //     // **************** Listen for single Document ****************
-  //     // console.log(`${doc.id} => `, doc.data());
-  //     // ***** get to know whether the source of data is the server or the cached *****
-  //     // const source = doc.metadata.hasPendingWrites ? 'Cached' : 'Server';
-  //     // console.log(`From  ${source} => `, doc.data());
-  //     // setName(doc.data().name);
+  // **************** Listen for single Document ****************
+  // console.log(`${doc.id} => `, doc.data());
+  // ***** get to know whether the source of data is the server or the cached *****
+  // const source = doc.metadata.hasPendingWrites ? 'Cached' : 'Server';
+  // console.log(`From  ${source} => `, doc.data());
+  // setName(doc.data().name);
 
-  //     // ************* Listen for Quaries **************
+  // ************* Listen for Quaries **************
   //     docSnap.forEach((doc) => {
   //       if (doc.exists()) {
   //         console.log(`From ${doc.id} => `, doc.data());
@@ -339,18 +339,18 @@ const CloudFireStore = ({ setState }) => {
   //         console.log("Document doesn't exists");
   //       }
   //     }); // end of forEach
-  //     // ************* To See the Changes weather the document is ADDED, MODIFIED, REMOVED **************
+  // ************* To See the Changes weather the document is ADDED, MODIFIED, REMOVED **************
 
-  //     // docSnap.docChanges().forEach((change) => {
-  //     //   if (change.type === 'added') {
-  //     //     console.log(`New City Added : `, change.doc.data());
-  //     //   } else if (change.type === 'modified') {
-  //     //     console.log(`City Modified : `, change.doc.data());
-  //     //   } else if (change.type === 'removed') {
-  //     //     console.log(`City Removed: `, change.doc.data());
-  //     //   }
-  //     // });
-  //     // ************* Source of Data cache or server ? ***************
+  // docSnap.docChanges().forEach((change) => {
+  //   if (change.type === 'added') {
+  //     console.log(`New City Added : `, change.doc.data());
+  //   } else if (change.type === 'modified') {
+  //     console.log(`City Modified : `, change.doc.data());
+  //   } else if (change.type === 'removed') {
+  //     console.log(`City Removed: `, change.doc.data());
+  //   }
+  // });
+  // ************* Source of Data cache or server ? ***************
   //     const source = docSnap.metadata.fromCache ? 'local cache' : 'server';
   //     console.log(source);
   //   },
@@ -371,9 +371,9 @@ const CloudFireStore = ({ setState }) => {
   //       return [...prev, lmDocRef];
   //     });
 
-  //     // new Promise([await setDoc(doc(lmDocRef, { ...document.data() })), await setDoc({ open: true, message: 'Document Added' })]);
+  // new Promise([await setDoc(doc(lmDocRef, { ...document.data() })), await setDoc({ open: true, message: 'Document Added' })]);
 
-  //     // console.log(`From ${doc.id} => `, doc.data());
+  // console.log(`From ${doc.id} => `, doc.data());
   //   });
   // };
 
@@ -381,7 +381,7 @@ const CloudFireStore = ({ setState }) => {
   // let document = 0;
   // const getData = async () => {
   //   try {
-  //     // ********* Setting the Previous Doc in the CURSOR clause ************
+  // ********* Setting the Previous Doc in the CURSOR clause ************
   //     const prevQuery = query(collection(cf, 'cities'), orderBy('population'));
   //     const prevDocSnap = await getDocs(prevQuery);
   //     const q = query(colRef, orderBy('population'), startAt(prevDocSnap.docs[document]), limit(2));
@@ -397,11 +397,11 @@ const CloudFireStore = ({ setState }) => {
   // };
 
   // useEffect(() => {
-  //   // getData();
+  // getData();
   //   disconnectNetwork();
-  //   // return () => {
-  //   //   getData();
-  //   // };
+  // return () => {
+  //   getData();
+  // };
   // }, []); // eslint-disable-line
 
   return (
